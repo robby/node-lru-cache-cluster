@@ -1,0 +1,36 @@
+{
+  "name": "lru-cache-cluster",
+  "description": "Cluster aware LRU cache. Master process maintains cache and uses worker messaging to deliver items machine-local.",
+  "version": "0.0.1",
+  "main": "lib/lru-cache-cluster.js",
+  "devDependencies": {
+    "tap": "~0.4.8"
+  },
+  "scripts": {
+    "test": "tap test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/robby/node-lru-cache-cluster.git"
+  },
+  "keywords": [
+    "lru-cache",
+    "lru",
+    "cache",
+    "cluster",
+    "cache"
+  ],
+  "author": {
+    "name": "Robby Valles",
+    "email": "robby.valles@gmail.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/robby/node-lru-cache-cluster/issues"
+  },
+  "homepage": "https://github.com/robby/node-lru-cache-cluster",
+  "dependencies": {
+    "lru-cache": "~2.5.0",
+    "uuid": "~1.4.1"
+  }
+}
