@@ -4,6 +4,14 @@ cluster aware lru-cache - A cache object that deletes the least-recently-used it
 
 ## Usage:
 
+Require ```lru-cache-cluster``` in master process
+
+```javascript
+require('lru-cache-cluster');
+```
+
+In worker processes, require ```lru-cache-cluster``` and use as follows:
+
 ```javascript
 var LRU = require("lru-cache-cluster")
   , options = { max: 500
