@@ -1,7 +1,7 @@
 {
   "name": "lru-cache-cluster",
   "description": "Cluster aware LRU cache. Master process maintains cache and uses worker messaging to deliver items machine-local.",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "main": "lib/lru-cache-cluster.js",
   "devDependencies": {
     "tap": "~0.4.8"
@@ -31,6 +31,6 @@
   "homepage": "https://github.com/robby/node-lru-cache-cluster",
   "dependencies": {
     "lru-cache": "~2.5.0",
-    "uuid": "~1.4.1"
+    "node-uuid": "~1.4.1"
   }
 }
