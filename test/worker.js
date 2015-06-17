@@ -40,9 +40,11 @@ setTimeout(function(){
   }, 250);
 }, 1000);
 */
+
 var cluster = require( "cluster" );
 var test = require('tap').test;
 
+/*
 test("basic", function (t) {
   var cache = LRU( { max: 10, namespace: "basic " + ( ( cluster.worker || { } ).workerID || 0 ) } );
   cache.set("key", "value")
@@ -100,16 +102,18 @@ test("lru recently gotten", function (t) {
 
   setTimeout(function(){ t.end(); }, 1000);
 })
-
+*/
 test("lru complete test", function (t) {
 
-  var cache = LRU( { max: 1000, namespace: "complete" } );
+  var dt = (new Date()).valueOf(), dtMax = dt + 1;
+  var cache = LRU( { max: 10000000, namespace: "complete" } );
 
-  var pieces = 12, items = 10000, workers = 2;
+  var pieces = 12, items = 10000, workers = require("os").cpus().length >> 2;
   for( var i = ( cluster.worker || {} ).workerID - 1; i < pieces; i += workers ) {
     for ( var j = 0, l = items; j < l; j++ ) {
       cache.complete( ( "0000" + j.toString( 16 ) ).slice( -4 ), i, pieces, String( i ) + " ", function( data ) {
-        if ( !data ) return;
+        dtMax = (new Date()).valueOf();
+	if ( !data ) return;
         cache.count( "++++", 1 );
       } );
     }
@@ -117,6 +121,8 @@ test("lru complete test", function (t) {
 
   setTimeout( function() {
       cache.count( "++++", 0, function( value ) {
+	console.log( ( dtMax - dt ) );
+	console.log( Math.floor( pieces /* workers */ ) * items / ( dtMax - dt ) * 1000 );
         t.equal( value, items ); } ); }, 10000 );
 
   setTimeout(function(){ t.end(); }, 5000);

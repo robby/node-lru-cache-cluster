@@ -7,5 +7,5 @@ cluster.setupMaster({
 		silent : false
 });
 
-cluster.fork();
-cluster.fork();
+for( var i = 0, l = require("os").cpus().length >> 2; i < l; i++ ) {
+	cluster.fork(); }
