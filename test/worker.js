@@ -40,10 +40,13 @@ setTimeout(function(){
   }, 250);
 }, 1000);
 */
+
+var cluster = require( "cluster" );
 var test = require('tap').test;
 
+/*
 test("basic", function (t) {
-  var cache = new LRU({max: 10})
+  var cache = LRU( { max: 10, namespace: "basic " + ( ( cluster.worker || { } ).workerID || 0 ) } );
   cache.set("key", "value")
 
   cache.get('key', function(value) {
@@ -58,7 +61,7 @@ test("basic", function (t) {
 })
 
 test("least recently set", function (t) {
-  var cache = new LRU(2)
+  var cache = LRU( { max: 2, namespace: "least recently set " + ( ( cluster.worker || { } ).workerID || 0 ) } )
   cache.set("a", "A")
   cache.set("b", "B")
   cache.set("c", "C")
@@ -79,7 +82,7 @@ test("least recently set", function (t) {
 })
 
 test("lru recently gotten", function (t) {
-  var cache = new LRU(2)
+  var cache = LRU( { max: 2, namespace: "lru recently gotten " + ( ( cluster.worker || { } ).workerID || 0 ) } )
   cache.set("a", "A")
   cache.set("b", "B")
   cache.get("a")
@@ -98,4 +101,29 @@ test("lru recently gotten", function (t) {
   });
 
   setTimeout(function(){ t.end(); }, 1000);
+})
+*/
+test("lru complete test", function (t) {
+
+  var dt = (new Date()).valueOf(), dtMax = dt + 1;
+  var cache = LRU( { max: 10000000, namespace: "complete" } );
+
+  var pieces = 12, items = 10000, workers = require("os").cpus().length >> 2;
+  for( var i = ( cluster.worker || {} ).workerID - 1; i < pieces; i += workers ) {
+    for ( var j = 0, l = items; j < l; j++ ) {
+      cache.complete( ( "0000" + j.toString( 16 ) ).slice( -4 ), i, pieces, String( i ) + " ", function( data ) {
+        dtMax = (new Date()).valueOf();
+	if ( !data ) return;
+        cache.count( "++++", 1 );
+      } );
+    }
+  }  
+
+  setTimeout( function() {
+      cache.count( "++++", 0, function( value ) {
+	console.log( ( dtMax - dt ) );
+	console.log( Math.floor( pieces /* workers */ ) * items / ( dtMax - dt ) * 1000 );
+        t.equal( value, items ); } ); }, 10000 );
+
+  setTimeout(function(){ t.end(); }, 5000);
 })
