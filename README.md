@@ -25,6 +25,9 @@ cache.set("key", "value")
 cache.get("key", function(value){
 	// "value"
 })
+cache.peek("key", function(value){
+	// "value"
+})
 
 ```
 
