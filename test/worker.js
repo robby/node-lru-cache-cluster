@@ -25,7 +25,7 @@ function checkCache(username) {
     else {
       console.timeEnd('checking cache for ' + username, profile);
     }
-  });  
+  });
 }
 
 setTimeout(function(){
@@ -33,7 +33,7 @@ setTimeout(function(){
   checkCache('michael');
   checkCache('steve');
 
-  setTimeout(function(){ 
+  setTimeout(function(){
     checkCache('robby'); checkCache('michael'); checkCache('steve');
 
     setTimeout(function(){ process.exit(); }, 2000);
@@ -43,6 +43,8 @@ setTimeout(function(){
 var test = require('tap').test;
 
 test("basic", function (t) {
+  t.plan(2);
+
   var cache = new LRU({max: 10})
   cache.set("key", "value")
 
@@ -53,11 +55,11 @@ test("basic", function (t) {
   cache.get('nada', function(value) {
     t.equal(value, undefined);
   });
-
-  setTimeout(function(){ t.end(); }, 1000);
 })
 
 test("least recently set", function (t) {
+  t.plan(3);
+
   var cache = new LRU(2)
   cache.set("a", "A")
   cache.set("b", "B")
@@ -74,15 +76,15 @@ test("least recently set", function (t) {
   cache.get('a', function(value) {
     t.equal(value, undefined);
   });
-
-  setTimeout(function(){ t.end(); }, 1000);
 })
 
 test("lru recently gotten", function (t) {
+  t.plan(3);
+
   var cache = new LRU(2)
   cache.set("a", "A")
   cache.set("b", "B")
-  cache.get("a")
+  cache.get("a", function(){})
   cache.set("c", "C")
 
   cache.get('c', function(value) {
@@ -96,6 +98,8 @@ test("lru recently gotten", function (t) {
   cache.get('a', function(value) {
     t.equal(value, 'A');
   });
-
-  setTimeout(function(){ t.end(); }, 1000);
 })
+
+test('quit worker', function(){
+  process.exit(0);
+});
