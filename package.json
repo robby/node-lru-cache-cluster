@@ -7,7 +7,7 @@
     "tap": "~0.4.8"
   },
   "scripts": {
-    "test": "tap test"
+    "test": "tap test/clustered.js"
   },
   "repository": {
     "type": "git",
@@ -30,7 +30,7 @@
   },
   "homepage": "https://github.com/robby/node-lru-cache-cluster",
   "dependencies": {
-    "lru-cache": "~2.5.0",
+    "lru-cache": "~3.2.0",
     "node-uuid": "~1.4.1"
   }
 }
